@@ -23,10 +23,14 @@ block main
                             td {{contact.name}}
                             td {{contact.lastName}}
                             td
-                                p(ng-repeat='phone in contact.phone') {{phone}}
+                                p(ng-repeat='phone in filterArrays(contact)') {{phone}}
         .panel-footer
 block append script
     script.
         cm.controller('list', function($scope, $http){
             $scope.contacts = !{JSON.stringify(contacts)}
+            $scope.filterArrays = function(contact){
+                contact.phone = [].concat(contact.phone).filter(onlyUnique)
+                return contact.phone
+            }
         });

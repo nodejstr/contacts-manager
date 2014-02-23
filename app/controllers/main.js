@@ -48,7 +48,7 @@ exports.findDuplicates = function (err, res) {
                 phones: { $addToSet: '$phone' },
                 count: { $sum: 1 }
             }},
-            {$match: {count: {$gt : 1}}},
+            {$match: {count: {$gt: 1}}},
             {$sort: {count: -1}}
         ]).exec(function (err, duplicates) {
             res.render('main/duplicates', {error: err, contacts: duplicates})
@@ -56,48 +56,36 @@ exports.findDuplicates = function (err, res) {
 }
 
 exports.mergeDuplicate = function (req, res) {
-    if (req.query.all) {
-        var i = 0;
-        Contact.aggregate([
-                { $project: { name: 1, lastName: 1, phone: 1 } },
-                { $group: {
-                    _id: { name: '$name', lastName: '$lastName'},
-                    phones: { $addToSet: '$phone' },
-                    count: { $sum: 1 }
-                }},
-                {$match: {count: {$gt : 1}}},
-                {$sort: {count: -1}}
-            ]).exec(function (err, duplicates) {
-                async.whilst(
-                    function () {
-                        return i < duplicates.length
-                    },
-                    function (callback) {
-                        var dup = duplicates[i];
-                        console.log(i + 1)
-                        Contact.remove({name: dup._id.name, lastName: dup._id.lastName}).exec(function (err) {
-                            Contact.create({name: dup._id.name, lastName: dup._id.lastName, phone: dup.phones}, function (err) {
-                                if (err) console.log(err)
-                            })
-                            i++;
-                            setTimeout(callback, 10);
+    var i = 0;
+    Contact.aggregate([
+            { $project: { name: 1, lastName: 1, phone: 1 } },
+            { $group: {
+                _id: { name: '$name', lastName: '$lastName'},
+                phones: { $addToSet: '$phone' },
+                count: { $sum: 1 }
+            }},
+            {$match: {count: {$gt: 1}}},
+            {$sort: {count: -1}}
+        ]).exec(function (err, duplicates) {
+            async.whilst(
+                function () {
+                    return i < duplicates.length
+                },
+                function (callback) {
+                    var dup = duplicates[i];
+                    console.log(i + 1)
+                    Contact.remove({name: dup._id.name, lastName: dup._id.lastName}).exec(function (err) {
+                        Contact.create({name: dup._id.name, lastName: dup._id.lastName, phone: dup.phones}, function (err) {
+                            if (err) console.log(err)
                         })
-                    },
-                    function (err) {
-                        console.log('merging done err:', err)
-                        res.json({result:1})
-                    }
-                )
-            })
-    } else {
-        var dup = req.body,
-            old = {name: dup._id.name, lastName: dup._id.lastName},
-            newOne = {name: dup._id.name, lastName: dup._id.lastName, phone: dup.phones}
-        Contact.remove(old).exec(function (err) {
-            Contact.create(newOne, function (err) {
-                if (err) console.log(err)
-                res.json({result:1})
-            })
+                        i++;
+                        setTimeout(callback, 10);
+                    })
+                },
+                function (err) {
+                    console.log('merging done err:', err)
+                    res.json({result: 1})
+                }
+            )
         })
-    }
 }

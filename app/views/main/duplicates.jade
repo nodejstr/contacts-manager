@@ -3,7 +3,7 @@ block main
     .panel.panel-default(ng-controller='list')
         .panel-heading
             .panel-title
-                p Total Count : {{contacts.length}}
+                p Total Count : #{contacts.length}
                 p
                     button.btn.btn-primary(ng-click='mergeAll()') Merge All
         .panel-body
@@ -19,42 +19,20 @@ block main
                                 label Count
                             th
                                 label Phones
-                            th
-                                label Merge
                     tbody
-                        tr.table-striped(ng-repeat='contact in contacts',ng-hide='contact.isHidden')
-                            td {{contact._id.name}}
-                            td {{contact._id.lastName}}
-                            td {{contact.count}}
-                            td
-                                p(ng-repeat='phone in contact.phones') {{phone}}
-                            td
-                               button.btn.btn-primary(ng-click='merge(contact)') Merge
-
+                        each contact in contacts
+                            tr.table-striped
+                                td #{contact._id.name}
+                                td #{contact._id.lastName}
+                                td #{contact.count}
+                                td
+                                    each phone in contact.phones
+                                        p #{phone}
         .panel-footer
 block append script
     script.
         cm.controller('list', function($scope, $http){
             $scope.contacts = !{JSON.stringify(contacts)}
-            $scope.merge = function(contact){
-                console.log(contact)
-                NProgress.start()
-                $http({
-                    url: '/mergeDuplicate',
-                    data : contact,
-                    method : 'post',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    success : function(data){
-                        NProgress.done()
-                        contact.isHidden = true
-                        alertify.succes('Done')
-                        console.log(data)
-                    }
-                })
-            }
-
             $scope.mergeAll = function(contact){
                 console.log(contact)
                 NProgress.start()
