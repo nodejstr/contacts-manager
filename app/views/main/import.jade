@@ -1,3 +1,20 @@
 extends ../layout/default
 block main
-    p='import'
+    .panel.panel-default(ng-controller='import')
+        .panel-heading
+            .panel-title
+                p Import new contacts
+        .panel-body
+            .container-fluid
+                form.form-vertical(method='post',action='import', enctype='multipart/form-data')
+                    .form-group
+                        label.col-sm-2 Input File
+                        input.col-sm-10(type='file',accept='.xml',name='contacts')
+                    .form-group
+                        button.pull-right.btn.btn-primary Upload
+        .panel-footer
+block append script
+    script.
+        cm.controller('import', function($scope, $http){
+
+        });

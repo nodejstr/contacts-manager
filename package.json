@@ -16,7 +16,9 @@
         "connect-mongo": "*",
         "connect-flash": "*",
         "winston": "*",
-        "bower": "*"
+        "bower": "*",
+        "xml2json": "*",
+        "connect-multiparty": "*"
     },
     "main": "server.js",
     "devDependencies": {},

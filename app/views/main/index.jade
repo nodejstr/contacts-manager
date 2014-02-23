@@ -1,3 +1,32 @@
 extends ../layout/default
 block main
-    p='main'
+    .panel.panel-default(ng-controller='list')
+        .panel-heading
+            .panel-title
+                p Total Count : {{contacts.length}}
+        .panel-body
+            .table-responsive
+                table.table.table-hover.table-bordered
+                    thead
+                        tr
+                            th
+                                label Name
+                                input(ng-model='search.name')
+                            th
+                                label Surname
+                                input(ng-model='search.surname')
+                            th
+                                label Phone
+                                input(ng-model='search.phone')
+                    tbody
+                        tr.table-striped(ng-repeat='contact in contacts |filter: search')
+                            td {{contact.name}}
+                            td {{contact.surname}}
+                            td {{contact.phone}}
+        .panel-footer
+block append script
+    script.
+        cm.controller('list', function($scope, $http){
+            $scope.contacts = !{JSON.stringify(contacts)}
+            console.log($scope.contacts.length)
+        });
