@@ -13,20 +13,19 @@ block main
                                 label Name
                                 input(ng-model='search.name')
                             th
-                                label Surname
-                                input(ng-model='search.surname')
+                                label Last Name
+                                input(ng-model='search.lastName')
                             th
                                 label Phone
                                 input(ng-model='search.phone')
                     tbody
-                        tr.table-striped(ng-repeat='contact in contacts |filter: search')
+                        tr.table-striped(ng-repeat='contact in contacts |filter: search | limitTo:25')
                             td {{contact.name}}
-                            td {{contact.surname}}
+                            td {{contact.lastName}}
                             td {{contact.phone}}
         .panel-footer
 block append script
     script.
         cm.controller('list', function($scope, $http){
             $scope.contacts = !{JSON.stringify(contacts)}
-            console.log($scope.contacts.length)
         });

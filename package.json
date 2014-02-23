@@ -18,7 +18,8 @@
         "winston": "*",
         "bower": "*",
         "xml2json": "*",
-        "connect-multiparty": "*"
+        "connect-multiparty": "*",
+        "async":"*"
     },
     "main": "server.js",
     "devDependencies": {},
