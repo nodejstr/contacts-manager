@@ -7,5 +7,6 @@ module.exports = function (app, config, passport) {
         controllers[file.split('.')[0]] = require(controllersPath + file)
     })
 
-    app.get('/', controllers.site.index)
+    app.get('/', controllers.main.index)
+    app.get('/import', controllers.main.import)
 };

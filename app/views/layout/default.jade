@@ -1,0 +1,17 @@
+doctype
+html
+    head
+        title #{title}
+        include ./head
+        block head
+    body(ng-cloak)
+        include ./header
+        .container
+            if(error)
+                .alert.alert-danger
+                    button.close(type='button',data-dismiss='alert',aria-hidden='true') &times;
+                    p #{message}
+                    p #{JSON.stringify(error)}
+            block main
+        include ./script
+        block script

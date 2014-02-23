@@ -1,0 +1,13 @@
+nav.navbar.navbar-default(role='navigation')
+    .container-fluid
+        .navbar-header
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='#mainNavBar')
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+            a.navbar-brand(href='/') Contacts Manager
+        #mainNavBar.collapse.navbar-collapse
+            ul.nav.navbar-nav
+                li.dropdown
+                    a(href='/import') Import

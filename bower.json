@@ -1,20 +1,24 @@
 {
-  "name": "contacts-manager",
-  "version": "0.0.0",
-  "homepage": "https://github.com/nodejstr/contacts-manager",
-  "authors": [
-    "Salim KAYABAŞI <salim.kayabasi@gmail.com>"
-  ],
-  "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "public/bower",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "bootstrap": "~3.1.1"
-  }
+    "name": "contacts-manager",
+    "version": "0.0.0",
+    "homepage": "https://github.com/nodejstr/contacts-manager",
+    "authors": [
+        "Salim KAYABAŞI <salim.kayabasi@gmail.com>"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "public/bower",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "bootstrap": "*",
+        "alertify": "*",
+        "font-awesome": "*",
+        "alertify": "*",
+        "nprogress": "*"
+    }
 }
