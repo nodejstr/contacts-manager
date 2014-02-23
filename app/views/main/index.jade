@@ -22,7 +22,8 @@ block main
                         tr.table-striped(ng-repeat='contact in contacts |filter: search | limitTo:25')
                             td {{contact.name}}
                             td {{contact.lastName}}
-                            td {{contact.phone}}
+                            td
+                                p(ng-repeat='phone in contact.phone') {{phone}}
         .panel-footer
 block append script
     script.
