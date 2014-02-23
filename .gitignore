@@ -8,6 +8,8 @@ lib-cov
 *.gz
 *.idea
 .idea/
+.bower-cache/*
+.bower-registry/*
 
 pids
 logs
@@ -16,3 +18,5 @@ test/*.log
 npm-debug.log
 node_modules
 newrelic_agent.log
+
+public/bower/*

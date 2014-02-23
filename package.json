@@ -1,0 +1,30 @@
+{
+    "name": "contacts-manager",
+    "version": "0.0.1",
+    "description": "basic contacts manager",
+    "scripts": {
+        "main": "./node_modules/.bin/forever -m 5 server.js",
+        "postinstall": "./node_modules/bower/bin/bower install"
+    },
+    "author": "Salim KAYABASI",
+    "dependencies": {
+        "express": "*",
+        "jade": "*",
+        "mongoose": "*",
+        "forever": "*",
+        "connect-mongo": "*",
+        "connect-flash": "*",
+        "winston": "*",
+        "bower": "*"
+    },
+    "main": "server.js",
+    "devDependencies": {},
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/nodejstr/contacts-manager.git"
+    },
+    "bugs": {
+        "url": "https://github.com/nodejstr/contacts-manager/issues"
+    },
+    "homepage": "https://github.com/nodejstr/contacts-manager"
+}

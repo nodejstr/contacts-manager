@@ -1,0 +1,12 @@
+var express = require('express')
+    , app = express()
+    , config = require('./config/config')
+
+require('./config/log')(app)
+app.log.info('app set to : \'' + config.status + '\'')
+require('mongoose').connect(config.db, {safe: true, server: {socketOptions: {keepAlive: 1}}})
+require('./config/mongoose')(config)
+require('./config/express')(app, config)
+require('./config/routes')(app, config)
+app.listen(config.port)
+app.log.info('app is ready at port : \'' + config.port + '\'')
