@@ -6,10 +6,13 @@ lib-cov
 *.out
 *.pid
 *.gz
+*.idea
+.idea/
 
 pids
 logs
 results
-
+test/*.log
 npm-debug.log
 node_modules
+newrelic_agent.log
