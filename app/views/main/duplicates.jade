@@ -37,7 +37,7 @@ block append script
                 console.log(contact)
                 NProgress.start()
                 $http({
-                url: '/mergeDuplicate?all=true',
+                url: '/mergeDuplicate',
                 data : contact,
                 method : 'post',
                 headers: {
