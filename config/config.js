@@ -7,7 +7,7 @@ module.exports = {
         root: root
     },
     'prod': {
-        db: 'mongodb://localhost/contacts',
+        db:process.env.MONGOLAB_URI || 'mongodb://localhost/contacts',
         status: 'prod',
         port: process.env.PORT || 1337,
         root: root
