@@ -84,9 +84,13 @@ exports.mergeDuplicate = function (req, res) {
 }
 
 exports.edit = function (req, res) {
-    Contact.findOne({_id: req.params.id}).exec(function (err, doc) {
-        res.render('main/edit', {error: err, contact: doc})
-    })
+    if (req.params.id) {
+        Contact.findOne({_id: req.params.id}).exec(function (err, doc) {
+            res.render('main/edit', {error: err, contact: doc})
+        })
+    } else {
+        res.render('main/edit', {contact: new Contact()})
+    }
 }
 
 exports.update = function (req, res) {
@@ -97,7 +101,7 @@ exports.update = function (req, res) {
         return e && e.length
     })
     contact.updatedAt = new Date()
-    Contact.findOneAndUpdate({_id: Id}, contact).exec(function (err, doc) {
+    Contact.findOneAndUpdate({_id: Id}, contact,{upsert:true}).exec(function (err, doc) {
         res.redirect('/edit/' + Id)
     })
 }
