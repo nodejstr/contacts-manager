@@ -1,0 +1,25 @@
+extends ../layout/default
+block main
+    .panel.panel-default
+        .panel-heading
+            .panel-title
+                p #{contact.name + ' ' + contact.lastName}
+        .panel-body
+            form.form-horizontal(method='post',action='/edit/#{contact._id}')
+                input(type='hidden',value=contact._id,name='_id')
+                .form-group
+                    label.col-sm-2 Name
+                    .col-sm-10
+                        input.input-sm.form-control(value=contact.name,name='name')
+                .form-group
+                    label.col-sm-2 Last Name
+                    .col-sm-10
+                        input.input-sm.form-control(value=contact.lastName,name='lastName')
+                .form-group
+                    label.col-sm-2 Phone ( add more using with comma )
+                    .col-sm-10
+                        input.input-sm.form-control(value=contact.phone,name='phone')
+                .form-group
+                    .col-sm-10.col-sm-offset-2
+                        button.btn.btn-primary Submit
+        .panel-footer

@@ -33,22 +33,25 @@ block append script
     script.
         cm.controller('list', function($scope, $http){
             $scope.contacts = !{JSON.stringify(contacts)}
-            $scope.mergeAll = function(contact){
-                console.log(contact)
+            $scope.mergeAll = function(){
                 NProgress.start()
                 $http({
-                url: '/mergeDuplicate',
-                data : contact,
-                method : 'post',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                success : function(data){
+                    url: '/mergeDuplicate',
+                    data : contact,
+                    method : 'post',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .success(function(data){
                     NProgress.done()
-                    contact.isHidden = true
                     alertify.succes('Done')
                     console.log(data)
-                    }
+                })
+                .error(function(data){
+                    NProgress.done()
+                    alertify.error('Error')
+                    console.log(data)
                 })
             }
         });

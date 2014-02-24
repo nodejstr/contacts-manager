@@ -18,19 +18,42 @@ block main
                             th
                                 label Phone
                                 input(ng-model='search.phone')
+                            th
+                                label Edit
+
                     tbody
-                        tr.table-striped(ng-repeat='contact in contacts |filter: search | limitTo:25')
+                        tr.table-striped(ng-repeat='contact in contacts |filter: search | limitTo:25',ng-show='!contact.isHidden')
                             td {{contact.name}}
                             td {{contact.lastName}}
                             td
                                 p(ng-repeat='phone in filterArrays(contact)') {{phone}}
+                            td
+                                a.btn.btn-primary(href='/edit/{{contact._id}}',target='_blank') Edit
+                                button.btn.btn-danger(ng-click='removeItem(contact)') Delete
         .panel-footer
 block append script
     script.
         cm.controller('list', function($scope, $http){
             $scope.contacts = !{JSON.stringify(contacts)}
+            $scope.count = $scope.contacts.filter(function(e){return !e.isHidden})
             $scope.filterArrays = function(contact){
                 contact.phone = [].concat(contact.phone).filter(onlyUnique)
                 return contact.phone
+            }
+            $scope.removeItem = function(contact){
+                NProgress.start()
+                $http.post('/delete',{id: contact._id})
+                .success(function(data){
+                    NProgress.done()
+                    contact.isHidden=true
+                    $scope.count--
+                    alertify.success('Done')
+                    console.log(data)
+                })
+                .error(function(data){
+                    NProgress.done()
+                    alertify.error('Error')
+                    console.log(data)
+                });
             }
         });

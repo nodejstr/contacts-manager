@@ -14,4 +14,7 @@ module.exports = function (app, config, passport) {
     app.post('/import', multipartMiddleware, controllers.main.upload)
     app.get('/findDuplicates', controllers.main.findDuplicates)
     app.post('/mergeDuplicate', controllers.main.mergeDuplicate)
+    app.get('/edit/:id', controllers.main.edit)
+    app.post('/edit/:id', controllers.main.update)
+    app.post('/delete', controllers.main.delete)
 };

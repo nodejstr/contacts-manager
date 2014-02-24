@@ -40,52 +40,70 @@ exports.upload = function (req, res) {
     res.redirect('/')
 }
 
+var aggregateContacs = Contact.aggregate([
+    { $project: { name: 1, lastName: 1, phone: 1 } },
+    { $group: {
+        _id: { name: '$name', lastName: '$lastName'},
+        phones: { $addToSet: '$phone' },
+        count: { $sum: 1 }
+    }},
+    {$match: {count: {$gt: 1}}},
+    {$sort: {count: -1}}
+])
+
 exports.findDuplicates = function (err, res) {
-    Contact.aggregate([
-            { $project: { name: 1, lastName: 1, phone: 1 } },
-            { $group: {
-                _id: { name: '$name', lastName: '$lastName'},
-                phones: { $addToSet: '$phone' },
-                count: { $sum: 1 }
-            }},
-            {$match: {count: {$gt: 1}}},
-            {$sort: {count: -1}}
-        ]).exec(function (err, duplicates) {
-            res.render('main/duplicates', {error: err, contacts: duplicates})
-        })
+    aggregateContacs.exec(function (err, duplicates) {
+        res.render('main/duplicates', {error: err, contacts: duplicates})
+    })
 }
 
 exports.mergeDuplicate = function (req, res) {
     var i = 0;
-    Contact.aggregate([
-            { $project: { name: 1, lastName: 1, phone: 1 } },
-            { $group: {
-                _id: { name: '$name', lastName: '$lastName'},
-                phones: { $addToSet: '$phone' },
-                count: { $sum: 1 }
-            }},
-            {$match: {count: {$gt: 1}}},
-            {$sort: {count: -1}}
-        ]).exec(function (err, duplicates) {
-            async.whilst(
-                function () {
-                    return i < duplicates.length
-                },
-                function (callback) {
-                    var dup = duplicates[i];
-                    console.log(i + 1)
-                    Contact.remove({name: dup._id.name, lastName: dup._id.lastName}).exec(function (err) {
-                        Contact.create({name: dup._id.name, lastName: dup._id.lastName, phone: dup.phones}, function (err) {
-                            if (err) console.log(err)
-                        })
-                        i++;
-                        setTimeout(callback, 10);
+    aggregateContacs.exec(function (err, duplicates) {
+        async.whilst(
+            function () {
+                return i < duplicates.length
+            },
+            function (callback) {
+                var dup = duplicates[i];
+                console.log(i + 1)
+                Contact.remove({name: dup._id.name, lastName: dup._id.lastName}).exec(function () {
+                    Contact.create({name: dup._id.name, lastName: dup._id.lastName, phone: dup.phones}, function (err) {
+                        if (err) console.log(err)
                     })
-                },
-                function (err) {
-                    console.log('merging done err:', err)
-                    res.json({result: 1})
-                }
-            )
-        })
+                    i++;
+                    setTimeout(callback, 10);
+                })
+            },
+            function (err) {
+                console.log('merging done err:', err)
+                res.json({result: 1})
+            }
+        )
+    })
+}
+
+exports.edit = function (req, res) {
+    Contact.findOne({_id: req.params.id}).exec(function (err, doc) {
+        res.render('main/edit', {error: err, contact: doc})
+    })
+}
+
+exports.update = function (req, res) {
+    var contact = req.body
+        , Id = contact._id
+    delete contact._id
+    contact.phone = contact.phone.split(',').filter(function (e) {
+        return e && e.length
+    })
+    contact.updatedAt = new Date()
+    Contact.findOneAndUpdate({_id: Id}, contact).exec(function (err, doc) {
+        res.redirect('/edit/' + Id)
+    })
+}
+
+exports.delete = function (req, res) {
+    Contact.remove({_id: req.body.id}).exec(function (err, result) {
+        res.json({error: err, result: result})
+    })
 }
