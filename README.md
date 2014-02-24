@@ -11,4 +11,5 @@ Make sure that you have already installed mongo & node.js
   $ npm install
 ```
 
-open url localhost:1337
+* open url [localhost:1337] (http://localhost:1337)
+* [live demo] (http://contact-manager-nodejstr.herokuapp.com)
