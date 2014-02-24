@@ -3,7 +3,7 @@ block main
     .panel.panel-default
         .panel-heading
             .panel-title
-                p #{contact.name + ' ' + contact.lastName}
+                p #{contact.name && contact.lastName ? contact.name + ' ' + contact.lastName : 'New User'}
         .panel-body
             form.form-horizontal(method='post',action='/edit/#{contact._id}')
                 input(type='hidden',value=contact._id,name='_id')
